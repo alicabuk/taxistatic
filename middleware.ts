@@ -1,64 +1,29 @@
 // middleware.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-import mersinData from './data/mersin.json';
-import adanaData from './data/adana.json';
+// Tüm client configlerini içeren tek bir dosyayı import edin
+import allClientConfigs from './data/clients.json';
 
-const clientConfigs = [mersinData, adanaData];
+export async function middleware(request: NextRequest) {
+  const host = request.headers.get('host'); // Gelen isteğin domain'ini al
 
-interface ClientConfig {
-  id: string;
-  domain: string;
-  title: string;
-  description: string;
-  taxiName: string;
-  mainHeading: string;
-  subHeadingText: string;
-  whatsappNumber: string;
-  phoneNumber: string;
-  popularRoutesTitle: string;
-  popularRoutes: string[];
-  heroImage: string;
-  taxiIcon: string;
-}
+  let clientConfig = allClientConfigs.find(
+    (config: any) => config.domain === host || `www.${config.domain}` === host
+  );
 
-export async function middleware(req: NextRequest) {
-  const url = req.nextUrl;
-  let hostname = req.headers.get('host') || '';
-
-  if (hostname.includes('localhost')) {
-    const clientParam = url.searchParams.get('client');
-    if (clientParam) {
-      const selectedClient = clientConfigs.find((c) => c.id === clientParam);
-      if (selectedClient) {
-        hostname = selectedClient.domain;
-      } else {
-        hostname = clientConfigs[0].domain;
-      }
-    } else {
-      hostname = clientConfigs[0].domain;
+  // Eğer eşleşen bir client bulunamazsa, varsayılanı bul
+  if (!clientConfig) {
+    clientConfig = allClientConfigs.find((config: any) => config.id === 'default');
+    // Eğer varsayılan da bulunamazsa (ki olmamalı), hata fırlat veya boş dön
+    if (!clientConfig) {
+      return new NextResponse('Internal Server Error: Default client config not found', { status: 500 });
     }
   }
 
-  hostname = hostname.replace(/^www\./, '');
-
-  const currentClient = clientConfigs.find((client) => client.domain === hostname);
-
-  if (!currentClient) {
-    console.warn(`Unknown domain: ${hostname}. Serving default client.`);
-    const requestHeaders = new Headers(req.headers);
-    // Varsayılan müşteri verisini Base64 olarak kodla
-    requestHeaders.set('x-client-data', btoa(encodeURIComponent(JSON.stringify(clientConfigs[0])))); // << BURADA DEĞİŞTİ
-    return NextResponse.next({
-      request: {
-        headers: requestHeaders,
-      },
-    });
-  }
-
-  const requestHeaders = new Headers(req.headers);
-  // Müşteri verisini Base64 olarak kodla
-  requestHeaders.set('x-client-data', btoa(encodeURIComponent(JSON.stringify(currentClient)))); // << BURADA DEĞİŞTİ
+  const requestHeaders = new Headers(request.headers);
+  const encodedClientConfig = Buffer.from(JSON.stringify(clientConfig)).toString('base64');
+  requestHeaders.set('x-client-data', encodedClientConfig);
 
   return NextResponse.next({
     request: {
@@ -68,5 +33,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: '/',
+  matcher: '/((?!api|_next/static|_next/image|favicon.ico).*)',
 };

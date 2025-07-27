@@ -1,48 +1,64 @@
 // app/layout.tsx
-import '../styles/globals.scss';
+import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { headers } from 'next/headers';
+import { headers } from 'next/headers'; // Layout içinde de headers kullanabiliriz!
+import '../styles/globals.scss';
+import allClientConfigs from '../data/clients.json'; // Middleware ile aynı JSON dosyasını import edin
 
 const inter = Inter({ subsets: ['latin'] });
 
+// ClientConfig için type definition (page.tsx'teki ile aynı)
 interface ClientConfig {
-  id: string;
-  domain: string;
-  title: string;
-  description: string;
-  taxiName: string;
-  mainHeading: string;
-  subHeadingText: string;
-  whatsappNumber: string;
-  phoneNumber: string;
-  popularRoutesTitle: string;
-  popularRoutes: string[];
-  heroImage: string;
-  taxiIcon: string;
+    id: string;
+    domain: string;
+    title: string;
+    description: string;
+    taxiName: string;
+    mainHeading: string;
+    subHeadingText: string;
+    whatsappNumber: string;
+    phoneNumber: string;
+    popularRoutesTitle: string;
+    popularRoutes: string[];
+    heroImage: string;
+    taxiIcon: string;
+    googleSiteVerification?: string; // Yeni alan
 }
 
-export async function generateMetadata() {
+// generateMetadata fonksiyonu, dinamik olarak meta veri oluşturmak için kullanılır
+export async function generateMetadata(): Promise<Metadata> {
   const headersList = await headers();
-  const clientDataHeader = headersList.get('x-client-data');
+  const host = headersList.get('host');
+
   let clientConfig: ClientConfig | null = null;
 
-  if (clientDataHeader) {
-    try {
-      // Başlıktan alınan Base64 string'ini decode et ve JSON.parse yap
-      clientConfig = JSON.parse(decodeURIComponent(atob(clientDataHeader))); // << BURADA DEĞİŞTİ
-    } catch (error) {
-      console.error("Failed to parse client data in layout:", error);
-    }
+  // Host'a göre doğru client config'i bul
+  if (host) {
+    clientConfig = allClientConfigs.find(
+      (config: any) => config.domain === host || `www.${config.domain}` === host
+    ) as ClientConfig;
   }
 
-  const defaultTitle = 'Taksi Hizmetleri - Hızlı ve Güvenilir';
-  const defaultDescription = 'Güvenilir taksi hizmeti için hemen arayın.';
+  // Eğer eşleşen bir client bulunamazsa, varsayılanı kullan
+  if (!clientConfig) {
+    clientConfig = allClientConfigs.find((config: any) => config.id === 'default') as ClientConfig;
+  }
 
-  return {
-    title: clientConfig?.title || defaultTitle,
-    description: clientConfig?.description || defaultDescription,
+  // Metadata objesini oluştur
+  const metadata: Metadata = {
+    title: clientConfig?.title || 'Taksi Durağı',
+    description: clientConfig?.description || 'Şehrin en hızlı ve güvenilir taksi hizmeti.',
+    // ... diğer ortak metadata ayarları
+
+    // Dinamik Google Site Verification
+    verification: clientConfig?.googleSiteVerification ? {
+      google: clientConfig.googleSiteVerification,
+    } : undefined, // Eğer doğrulama kodu yoksa, verification alanını ekleme
   };
+
+  return metadata;
 }
+
 
 export default function RootLayout({
   children,
