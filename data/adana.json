@@ -1,0 +1,22 @@
+{
+  "id": "adana",
+  "domain": "adanataksim.com",
+  "title": "Adana Taksim - 7/24 Güvenilir Taksi Hizmeti",
+  "description": "Adana'da hızlı, güvenilir ve uygun fiyatlı taksi hizmeti. Şehrin her köşesine konforlu ulaşım.",
+  "taxiName": "Adana Taksim",
+  "mainHeading": "Adana Taksim Durağı: Kesintisiz Hizmet",
+  "subHeadingText": "Adana'nın merkezinden şehrin her noktasına, Seyhan'dan Çukurova'ya, Adana Havaalanı'ndan Otogar'a kadar hızlı ve güvenli taksi hizmeti sunuyoruz. Kesintisiz hizmet için hemen arayın veya WhatsApp'tan ulaşın!",
+  "whatsappNumber": "905321234567",
+  "phoneNumber": "905321234567",
+  "popularRoutesTitle": "Adana Popüler Güzergahlar",
+  "popularRoutes": [
+    "Adana Merkez → Seyhan",
+    "Adana Merkez → Çukurova",
+    "Adana Merkez → Adana Havaalanı",
+    "Adana Merkez → Otogar",
+    "Adana Merkez → Optimum AVM",
+    "Adana Merkez → Balcalı Hastanesi"
+  ],
+  "heroImage": "/taxi-bg1.jpg",
+  "taxiIcon": "/taxi-icon.png"
+}
