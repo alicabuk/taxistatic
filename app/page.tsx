@@ -1,12 +1,15 @@
 // app/page.tsx
 // `'use client';` satırını kaldırdık, bu bir Server Component.
 
-import Image from 'next/image';
-import { Inter } from 'next/font/google';
-import { headers } from 'next/headers';
+import Image from "next/image";
+import { Roboto } from "next/font/google";
+import { headers } from "next/headers";
 
-const inter = Inter({ subsets: ['latin'] });
-
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["100", "300", "400", "500", "700", "900"], // Kullanmak istediğiniz ağırlıkları belirtin
+  variable: "--font-roboto", // İsteğe bağlı, Tailwind ile kullanmak için değişken adı
+});
 interface ClientConfig {
   id: string;
   domain: string;
@@ -25,12 +28,14 @@ interface ClientConfig {
 
 export default async function Home() {
   const headersList = await headers();
-  const clientDataHeader = headersList.get('x-client-data');
+  const clientDataHeader = headersList.get("x-client-data");
 
   let clientConfig: ClientConfig | null = null;
   if (clientDataHeader) {
     try {
-      clientConfig = JSON.parse(decodeURIComponent(atob(clientDataHeader)));
+      clientConfig = JSON.parse(
+        Buffer.from(clientDataHeader, "base64").toString("utf8")
+      );
     } catch (error) {
       console.error("Failed to parse client data from header:", error);
     }
@@ -59,8 +64,15 @@ export default async function Home() {
       {/* max-w-xs eklendi, daha büyük ekranlarda tam sığacak ama küçüklerde taşmayacak. */}
       {/* truncate sınıfı ile taşma durumunda metin kesilir ve ... eklenir */}
       <div className="absolute top-6 right-6 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-xl flex items-center gap-2 shadow-lg z-20 transition-all duration-300 hover:scale-105 max-w-[calc(100%-48px)] sm:max-w-xs">
-        <Image src={clientConfig.taxiIcon} alt={`${clientConfig.taxiName} İkonu`} width={32} height={32} />
-        <span className="text-base md:text-lg font-bold text-white tracking-wide truncate"> {/* truncate eklendi */}
+        <Image
+          src={clientConfig.taxiIcon}
+          alt={`${clientConfig.taxiName} İkonu`}
+          width={32}
+          height={32}
+        />
+        <span className="text-base md:text-lg font-bold text-white tracking-wide truncate">
+          {" "}
+          {/* truncate eklendi */}
           {clientConfig.taxiName}
         </span>
       </div>
@@ -68,7 +80,9 @@ export default async function Home() {
       {/* Sayfanın Tam Ortasındaki Ana İçerik - Genişliği artırıldı */}
       {/* max-w-xl yerine max-w-3xl (daha geniş) veya max-w-screen-md/lg (ekranın orta boylarına göre) kullanıldı */}
       {/* veya tamamen kaldırılabilir. Burada max-w-screen-md kullanıyoruz, tablet boyutlarına kadar genişler */}
-      <div className={`z-10 w-full max-w-xl md:max-w-3xl lg:max-w-4xl px-4 text-center space-y-8 animate-fade-in-up ${inter.className}`}>
+      <div
+        className={`z-10 w-full max-w-xl md:max-w-3xl lg:max-w-4xl px-4 text-center space-y-8 animate-fade-in-up ${roboto.className}`}
+      >
         <h1 className="text-4xl md:text-6xl font-extrabold text-yellow-400 drop-shadow-2xl leading-tight">
           {clientConfig.mainHeading}
         </h1>
@@ -87,7 +101,10 @@ export default async function Home() {
           {/* max-h-48 (veya daha büyük bir değer) ve overflow-y-auto eklendi */}
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-6 text-base md:text-lg font-medium overflow-y-auto max-h-48 custom-scrollbar">
             {clientConfig.popularRoutes.map((route, index) => (
-              <li key={index} className="flex items-center justify-center md:justify-start gap-2 text-white">
+              <li
+                key={index}
+                className="flex items-center justify-center md:justify-start gap-2 text-white"
+              >
                 <span className="text-yellow-400 text-xl">🚗</span> {route}
               </li>
             ))}
