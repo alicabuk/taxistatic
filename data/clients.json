@@ -20,15 +20,15 @@
     "googleSiteVerification": "LOe0fDew5q6PC7Zu6oiYKNTIJHq-EmGqPGvRcXnRT8M"
   },
   {
-    "id": "mersin",
+    "id": "ahmettanriverdi",
     "domain": "mersintaksi.com",
     "title": "Mersin Taksi - Hızlı ve Güvenilir 7/24 Taksi Hizmeti",
     "description": "Mersin'in her noktasına hızlı, güvenilir ve ekonomik taksi hizmeti. Şimdi arayın ya da WhatsApp’tan mesaj gönderin.",
-    "taxiName": "Mersin Taksi",
+    "taxiName": "Mersin VIP Taksi",
     "mainHeading": "Mersin Taksi Durağı: Hızlı ve Güvenilir Hizmet",
-    "subHeadingText": "Mersin'in Toroslar bölgesinden şehrin her noktasına konforlu ve güvenilir ulaşım sağlıyoruz. Mezitli'den Yenişehir'e, Forum AVM'den Şehir Hastanesi'ne kadar her yere hızlı ve ekonomik taksi hizmeti sunmaktayız. Hemen arayın veya WhatsApp üzerinden iletişime geçin!",
-    "whatsappNumber": "905551112233",
-    "phoneNumber": "905551112233",
+    "subHeadingText": "Mersin'in her bölgesinden şehrin her noktasına konforlu ve güvenilir ulaşım sağlıyoruz. Mezitli'den Yenişehir'e, Forum AVM'den Şehir Hastanesi'ne kadar her yere hızlı ve ekonomik taksi hizmeti sunmaktayız. Hemen arayın veya WhatsApp üzerinden iletişime geçin!",
+    "whatsappNumber": "905461696496",
+    "phoneNumber": "05461696496",
     "popularRoutesTitle": "Popüler Güzergahlarımız",
     "popularRoutes": [
       "Mersin → Mezitli",
@@ -36,30 +36,10 @@
       "Mersin → Forum AVM",
       "Mersin → Tarsus",
       "Mersin → Otogar",
-      "Mersin → Şehir Hastanesi"
-    ],
-    "heroImage": "/taxi-bg1.jpg",
-    "taxiIcon": "/taxi-icon.png",
-    "googleSiteVerification": "LOe0fDew5q6PC7Zu6oiYKNTIJHq-EmGqPGvRcXnRT8M"
-  },
-  {
-    "id": "adana",
-    "domain": "adanataksim.com",
-    "title": "Adana Taksim - 7/24 Güvenilir Taksi Hizmeti",
-    "description": "Adana'da hızlı, güvenilir ve uygun fiyatlı taksi hizmeti. Şehrin her köşesine konforlu ulaşım.",
-    "taxiName": "Adana Taksim",
-    "mainHeading": "Adana Taksim Durağı: Kesintisiz Hizmet",
-    "subHeadingText": "Adana'nın merkezinden şehrin her noktasına, Seyhan'dan Çukurova'ya, Adana Havaalanı'ndan Otogar'a kadar hızlı ve güvenli taksi hizmeti sunuyoruz. Kesintisiz hizmet için hemen arayın veya WhatsApp'tan ulaşın!",
-    "whatsappNumber": "905321234567",
-    "phoneNumber": "905321234567",
-    "popularRoutesTitle": "Adana Popüler Güzergahlar",
-    "popularRoutes": [
-      "Adana Merkez → Seyhan",
-      "Adana Merkez → Çukurova",
-      "Adana Merkez → Adana Havaalanı",
-      "Adana Merkez → Otogar",
-      "Adana Merkez → Optimum AVM",
-      "Adana Merkez → Balcalı Hastanesi"
+      "Mersin → Şehir Hastanesi",
+      "Mersin → Taşucu",
+      "Mersin → Havalimanı",
+      "Mersin → Şehir dışı"
     ],
     "heroImage": "/taxi-bg1.jpg",
     "taxiIcon": "/taxi-icon.png",
