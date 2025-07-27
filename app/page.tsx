@@ -1,15 +1,14 @@
-// app/page.tsx
-// `'use client';` satırını kaldırdık, bu bir Server Component.
-
 import Image from "next/image";
 import { Roboto } from "next/font/google";
 import { headers } from "next/headers";
+import Script from 'next/script'; // Script bileşenini import etmeyi unutmayın
 
 const roboto = Roboto({
   subsets: ["latin"],
-  weight: ["100", "300", "400", "500", "700", "900"], // Kullanmak istediğiniz ağırlıkları belirtin
-  variable: "--font-roboto", // İsteğe bağlı, Tailwind ile kullanmak için değişken adı
+  weight: ["100", "300", "400", "500", "700", "900"],
+  variable: "--font-roboto",
 });
+
 interface ClientConfig {
   id: string;
   domain: string;
@@ -24,18 +23,34 @@ interface ClientConfig {
   popularRoutes: string[];
   heroImage: string;
   taxiIcon: string;
+  googleAdsId?: string | null; // Google Ads ID'si eklendi (opsiyonel olabilir)
+  googleSiteVerification?: string | null; // Google Site Verification eklendi (opsiyonel olabilir)
+}
+
+// Önemli: Bu fonksiyonun middleware'dan gelen config'i parse ettiğini varsayıyorum.
+// Eğer clientDataHeader, clientConfig'in kendisi değil de base64 encoded string ise bu fonksiyon gerekli.
+// Eğer middleware'iniz zaten parse edip doğru formatta veriyorsa, bu fonksiyona ihtiyaç olmayabilir.
+function parseClientConfig(encodedConfig: string | null): ClientConfig | null {
+  if (!encodedConfig) return null;
+  try {
+    const decoded = Buffer.from(encodedConfig, "base64").toString("utf8");
+    return JSON.parse(decoded);
+  } catch (error) {
+    console.error("Failed to parse client data from header:", error);
+    return null;
+  }
 }
 
 export default async function Home() {
   const headersList = await headers();
+  // Middleware'ınızın client verisini hangi başlıkla gönderdiğinden emin olun.
+  // Önceki örneklerde 'X-Client-Config' kullanmıştık. Burada 'x-client-data' olarak güncellediniz.
   const clientDataHeader = headersList.get("x-client-data");
 
   let clientConfig: ClientConfig | null = null;
   if (clientDataHeader) {
     try {
-      clientConfig = JSON.parse(
-        Buffer.from(clientDataHeader, "base64").toString("utf8")
-      );
+      clientConfig = parseClientConfig(clientDataHeader); // parseClientConfig fonksiyonunu kullanıyoruz
     } catch (error) {
       console.error("Failed to parse client data from header:", error);
     }
@@ -49,8 +64,37 @@ export default async function Home() {
     );
   }
 
+  // Google Ads ID'sini clientConfig'ten çekiyoruz
+  const googleAdsId = clientConfig.googleAdsId;
+  const googleSiteVerification = clientConfig.googleSiteVerification; // Google Site Verification ID'si de çekildi
+
   return (
     <div className="relative w-full min-h-screen flex items-center justify-center bg-black text-white overflow-hidden p-4 md:p-8">
+      {/* Google Ads Scriptlerini Sadece googleAdsId varsa ekle */}
+      {googleAdsId && (
+        <>
+          <Script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${googleAdsId}`}
+            strategy="afterInteractive" // Sayfa etkileşimli hale geldikten sonra yükle
+          />
+          <Script id="google-ads-gtag" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', '${googleAdsId}');
+            `}
+          </Script>
+        </>
+      )}
+
+      {/* Google Site Verification Meta Etiketini Sadece googleSiteVerification varsa ekle */}
+      {googleSiteVerification && (
+        <meta name="google-site-verification" content={googleSiteVerification} />
+      )}
+
       {/* Background image */}
       <Image
         src={clientConfig.heroImage}
