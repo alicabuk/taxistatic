@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Roboto } from "next/font/google";
 import { headers } from "next/headers";
 import Script from 'next/script'; // Script bileşenini import etmeyi unutmayın
+import { useCallback } from "react";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -67,6 +68,15 @@ export default async function Home() {
   // Google Ads ID'sini clientConfig'ten çekiyoruz
   const googleAdsId = clientConfig.googleAdsId;
   const googleSiteVerification = clientConfig.googleSiteVerification; // Google Site Verification ID'si de çekildi
+
+  // Butona tıklanınca tetiklenecek fonksiyon
+  const trackConversion = useCallback((label: string) => {
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "conversion", {
+        send_to: `${googleAdsId}/${label}`,
+      });
+    }
+  }, [googleAdsId]);
 
   return (
     <div className="relative w-full min-h-screen flex items-center justify-center bg-black text-white overflow-hidden p-4 md:p-8">
@@ -159,6 +169,7 @@ export default async function Home() {
         <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-6 mt-10">
           <a
             href={`https://wa.me/${clientConfig.whatsappNumber}`}
+            onClick={() => trackConversion("WHATSAPP_CLICK")}
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition transform hover:scale-105 active:scale-95 text-lg md:text-xl relative overflow-hidden ring-2 ring-green-300 ring-offset-2 ring-offset-black"
@@ -168,6 +179,7 @@ export default async function Home() {
           </a>
           <a
             href={`tel:${clientConfig.phoneNumber}`}
+            onClick={() => trackConversion("CALL_CLICK")}
             className="group flex items-center justify-center gap-3 bg-yellow-300 hover:bg-yellow-400 text-black font-bold py-3 px-8 rounded-full shadow-xl transition transform hover:scale-105 active:scale-95 text-lg md:text-xl relative overflow-hidden ring-2 ring-yellow-200 ring-offset-2 ring-offset-black"
           >
             <span className="relative z-10">📞 Hemen Ara</span>
