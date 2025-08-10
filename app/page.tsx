@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { Roboto } from "next/font/google";
 import { headers } from "next/headers";
-import Script from 'next/script'; // Script bileşenini import etmeyi unutmayın
+import Script from "next/script"; // Script bileşenini import etmeyi unutmayın
 import { useCallback } from "react";
+import ConversionButtons from "./conversionButtons";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ interface ClientConfig {
   taxiIcon: string;
   googleAdsId?: string | null; // Google Ads ID'si eklendi (opsiyonel olabilir)
   googleSiteVerification?: string | null; // Google Site Verification eklendi (opsiyonel olabilir)
+  googleConversionLabel?: string;
 }
 
 // Önemli: Bu fonksiyonun middleware'dan gelen config'i parse ettiğini varsayıyorum.
@@ -69,15 +71,6 @@ export default async function Home() {
   const googleAdsId = clientConfig.googleAdsId;
   const googleSiteVerification = clientConfig.googleSiteVerification; // Google Site Verification ID'si de çekildi
 
-  // Butona tıklanınca tetiklenecek fonksiyon
-  const trackConversion = useCallback((label: string) => {
-    if (typeof window !== "undefined" && (window as any).gtag) {
-      (window as any).gtag("event", "conversion", {
-        send_to: `${googleAdsId}/${label}`,
-      });
-    }
-  }, [googleAdsId]);
-
   return (
     <div className="relative w-full min-h-screen flex items-center justify-center bg-black text-white overflow-hidden p-4 md:p-8">
       {/* Google Ads Scriptlerini Sadece googleAdsId varsa ekle */}
@@ -102,7 +95,10 @@ export default async function Home() {
 
       {/* Google Site Verification Meta Etiketini Sadece googleSiteVerification varsa ekle */}
       {googleSiteVerification && (
-        <meta name="google-site-verification" content={googleSiteVerification} />
+        <meta
+          name="google-site-verification"
+          content={googleSiteVerification}
+        />
       )}
 
       {/* Background image */}
@@ -166,26 +162,12 @@ export default async function Home() {
         </div>
 
         {/* WhatsApp ve Ara Butonları */}
-        <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-6 mt-10">
-          <a
-            href={`https://wa.me/${clientConfig.whatsappNumber}`}
-            onClick={() => trackConversion("WHATSAPP_CLICK")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition transform hover:scale-105 active:scale-95 text-lg md:text-xl relative overflow-hidden ring-2 ring-green-300 ring-offset-2 ring-offset-black"
-          >
-            <span className="relative z-10">💬 WhatsApp&apos;tan Yaz</span>
-            <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></span>
-          </a>
-          <a
-            href={`tel:${clientConfig.phoneNumber}`}
-            onClick={() => trackConversion("CALL_CLICK")}
-            className="group flex items-center justify-center gap-3 bg-yellow-300 hover:bg-yellow-400 text-black font-bold py-3 px-8 rounded-full shadow-xl transition transform hover:scale-105 active:scale-95 text-lg md:text-xl relative overflow-hidden ring-2 ring-yellow-200 ring-offset-2 ring-offset-black"
-          >
-            <span className="relative z-10">📞 Hemen Ara</span>
-            <span className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300"></span>
-          </a>
-        </div>
+        <ConversionButtons
+          googleAdsId={clientConfig.googleAdsId || ""}
+          googleConversionLabel={clientConfig.googleConversionLabel || ""}
+          whatsappNumber={clientConfig.whatsappNumber}
+          phoneNumber={clientConfig.phoneNumber}
+        />
       </div>
     </div>
   );
