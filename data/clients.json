@@ -47,5 +47,34 @@
     "googleSiteVerification": "f6yN9vhyfL7GmI9__b0n7cOD0MGx_JqXxO5M6qUTux4",
     "googleAdsId": "AW-17404058935",
     "googleConversionLabel": "_DWyCNTJ0IMbELe68-pA"
+  },
+  {
+    "id": "ahmetcan",
+    "domain": "mersintoroslartaksi.tr",
+    "title": "Mersin Taksi - Hızlı ve Güvenilir 7/24 Taksi Hizmeti",
+    "description": "Mersin'in her noktasına hızlı, güvenilir ve ekonomik taksi hizmeti. Şimdi arayın ya da WhatsApp’tan mesaj gönderin.",
+    "taxiName": "Mersin VIP Taksi",
+    "mainHeading": "Mersin Taksi Durağı: Hızlı ve Güvenilir Hizmet",
+    "subHeadingText": "Mersin'in her bölgesinden şehrin her noktasına konforlu ve güvenilir ulaşım sağlıyoruz. Mezitli'den Yenişehir'e, Forum AVM'den Şehir Hastanesi'ne kadar her yere hızlı ve ekonomik taksi hizmeti sunmaktayız. Hemen arayın veya WhatsApp üzerinden iletişime geçin!",
+    "whatsappNumber": "905384045215",
+    "phoneNumber": "05384045215",
+    "popularRoutesTitle": "Popüler Güzergahlarımız",
+    "popularRoutes": [
+      "Mersin → Mezitli",
+      "Mersin → Yenişehir",
+      "Mersin → Forum AVM",
+      "Mersin → Tarsus",
+      "Mersin → Otogar",
+      "Mersin → Şehir Hastanesi",
+      "Mersin → Taşucu",
+      "Mersin → Havalimanı",
+      "Mersin → Şehir dışı",
+      "Mersin → Kız Kalesi"
+    ],
+    "heroImage": "/taxi-bg1.jpg",
+    "taxiIcon": "/taxi-icon.png",
+    "googleSiteVerification": "Tk0Lf6SaPMzoyO82WC-uW5RLk7KDGHWFgXsuG33pUXc",
+    "googleAdsId": "AW-17640219446",
+    "googleConversionLabel": "_DWyCNTJ0IMbELe68-pB"
   }
 ]
